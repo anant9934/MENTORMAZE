@@ -8,3 +8,11 @@ export const professionalSubmission = pgTable("professional_submission", {
   answers: jsonb("answers").notNull(),
   context: jsonb("context"),
 });
+
+export const studentSubmission = pgTable("student_submission", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  surveyVersion: text("survey_version").notNull(),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  answers: jsonb("answers").notNull(),
+  context: jsonb("context"),
+});

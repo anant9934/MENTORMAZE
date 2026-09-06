@@ -1,4 +1,4 @@
-export type FieldType = 'single' | 'multiple' | 'ranking';
+export type FieldType = 'single' | 'multiple' | 'ranking' | 'textarea';
 
 export interface SurveyOption {
   id: string;
@@ -24,7 +24,25 @@ export interface SurveyScreen {
   contextPrompt?: string;
 }
 
-export const surveyConfig: SurveyScreen[] = [
+export interface SurveyManifest {
+  surveyType: 'professional' | 'student';
+  version: string;
+  hero: {
+    badge: string;
+    titleTop: string;
+    titleHighlight: string;
+    description: string;
+    buttonText: string;
+  };
+  success: {
+    title: string;
+    message: string;
+    subMessage: string;
+  };
+  config: SurveyScreen[];
+}
+
+export const professionalSurveyConfig: SurveyScreen[] = [
   {
     id: "q1",
     screenNumber: 1,
@@ -266,7 +284,7 @@ export const surveyConfig: SurveyScreen[] = [
           { id: "hackathon", label: "Hackathon Project" },
           { id: "academic", label: "Academic Project" },
           { id: "other", label: "Other" },
-          { id: "none", label: "I did not have significant project experience" } // Requires special validation logic to clear others
+          { id: "none", label: "I did not have significant project experience" }
         ],
         min: 1,
         max: 3
@@ -456,3 +474,297 @@ export const surveyConfig: SurveyScreen[] = [
     contextPrompt: "Optional: In 1–2 sentences, what is the most important advice you would give a CSE student preparing for placement?"
   }
 ];
+
+export const studentSurveyConfig: SurveyScreen[] = [
+  {
+    id: "q1",
+    screenNumber: 1,
+    title: "Where are you right now?",
+    fields: [
+      {
+        id: "current_stage",
+        label: "What best describes your current stage?",
+        type: "single",
+        options: [
+          { id: "1st_year", label: "1st Year" },
+          { id: "2nd_year", label: "2nd Year" },
+          { id: "3rd_year", label: "3rd Year" },
+          { id: "final_year", label: "Final Year" },
+          { id: "recent_grad", label: "Recent Graduate" }
+        ],
+        min: 1,
+        max: 1
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q2",
+    screenNumber: 2,
+    title: "What are you preparing for?",
+    fields: [
+      {
+        id: "target_role",
+        label: "Which role are you primarily targeting?",
+        type: "single",
+        options: [
+          { id: "sde", label: "Software Development / SDE" },
+          { id: "full_stack", label: "Full-Stack Development" },
+          { id: "backend", label: "Backend Development" },
+          { id: "frontend", label: "Frontend Development" },
+          { id: "ai_ml", label: "AI / ML" },
+          { id: "data", label: "Data / Analytics" },
+          { id: "cybersec", label: "Cybersecurity" },
+          { id: "cloud_devops", label: "DevOps / Cloud" },
+          { id: "not_sure", label: "I’m not sure yet" },
+          { id: "other", label: "Other" }
+        ],
+        min: 1,
+        max: 1
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q3",
+    screenNumber: 3,
+    title: "How prepared do you feel today?",
+    fields: [
+      {
+        id: "preparedness",
+        label: "Rate your current placement preparation.",
+        type: "single",
+        options: [
+          { id: "1", label: "1 — Just Starting" },
+          { id: "2", label: "2 — Early Stage" },
+          { id: "3", label: "3 — Making Progress" },
+          { id: "4", label: "4 — Well Prepared" },
+          { id: "5", label: "5 — Interview Ready" }
+        ],
+        min: 1,
+        max: 1
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q4",
+    screenNumber: 4,
+    title: "What’s your current preparation?",
+    fields: [
+      {
+        id: "current_prep",
+        label: "Select up to 5.",
+        type: "multiple",
+        options: [
+          { id: "dsa", label: "DSA" },
+          { id: "prog_fundamentals", label: "Programming Fundamentals" },
+          { id: "core_cs", label: "Core CS" },
+          { id: "dev", label: "Development" },
+          { id: "projects", label: "Projects" },
+          { id: "cp", label: "Competitive Programming" },
+          { id: "aptitude", label: "Aptitude" },
+          { id: "communication", label: "Communication" },
+          { id: "resume", label: "Resume / Portfolio" },
+          { id: "mocks", label: "Mock Interviews" },
+          { id: "internships", label: "Internships" },
+          { id: "nothing_consistent", label: "Nothing consistently yet" }
+        ],
+        min: 1,
+        max: 5
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q5",
+    screenNumber: 5,
+    title: "Where are you getting stuck?",
+    fields: [
+      {
+        id: "stuck",
+        label: "Select up to 3.",
+        type: "multiple",
+        options: [
+          { id: "dont_know_what_first", label: "I don’t know what to learn first" },
+          { id: "dsa", label: "DSA / Problem Solving" },
+          { id: "dev", label: "Development" },
+          { id: "core_cs", label: "Core CS" },
+          { id: "projects", label: "Building good projects" },
+          { id: "internships", label: "Finding internships" },
+          { id: "resume", label: "Resume / Portfolio" },
+          { id: "interview_prep", label: "Interview preparation" },
+          { id: "communication", label: "Communication" },
+          { id: "consistent", label: "Staying consistent" },
+          { id: "too_many_resources", label: "Too many resources / conflicting advice" },
+          { id: "career_path", label: "Choosing the right career path" },
+          { id: "company_expectations", label: "Understanding what companies actually expect" },
+          { id: "other", label: "Other" }
+        ],
+        min: 1,
+        max: 3
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q6",
+    screenNumber: 6,
+    title: "What do you want clarity on?",
+    fields: [
+      {
+        id: "clarity",
+        label: "Select up to 4.",
+        type: "multiple",
+        options: [
+          { id: "what_to_learn", label: "What should I learn?" },
+          { id: "what_first", label: "What should I learn first?" },
+          { id: "skills_matter", label: "What skills matter for my target role?" },
+          { id: "stop_wasting_time", label: "What should I stop wasting time on?" },
+          { id: "how_good_skills", label: "How good are my current skills?" },
+          { id: "what_projects", label: "What projects should I build?" },
+          { id: "how_to_prep", label: "How should I prepare for interviews?" },
+          { id: "companies_look_for", label: "What do companies actually look for?" },
+          { id: "right_path", label: "Am I on the right preparation path?" },
+          { id: "what_next", label: "What should I do next?" }
+        ],
+        min: 1,
+        max: 4
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q7",
+    screenNumber: 7,
+    title: "What would make guidance genuinely useful?",
+    fields: [
+      {
+        id: "useful_guidance",
+        label: "Select up to 4.",
+        type: "multiple",
+        options: [
+          { id: "roadmap", label: "Personalized preparation roadmap" },
+          { id: "skill_gap", label: "Skill-gap analysis" },
+          { id: "next_steps", label: "Recommended next steps" },
+          { id: "real_exp", label: "Real professional experiences" },
+          { id: "interview_prep", label: "Interview preparation" },
+          { id: "project_recs", label: "Project recommendations" },
+          { id: "company_specific", label: "Company-specific preparation" },
+          { id: "progress_tracking", label: "Progress tracking" },
+          { id: "career_guidance", label: "Career/role guidance" },
+          { id: "mentor_recs", label: "Human mentor recommendations" }
+        ],
+        min: 1,
+        max: 4
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q8",
+    screenNumber: 8,
+    title: "Where should AI help you?",
+    fields: [
+      {
+        id: "ai_help",
+        label: "If MentorMaze understands your profile, what would you want AI to do? (Select up to 4)",
+        type: "multiple",
+        options: [
+          { id: "analyze_prep", label: "Analyze my current preparation" },
+          { id: "weak_areas", label: "Identify my weak areas" },
+          { id: "what_next", label: "Tell me what to learn next" },
+          { id: "create_plan", label: "Create my preparation plan" },
+          { id: "review_projects", label: "Review my projects" },
+          { id: "simulate_interviews", label: "Simulate interviews" },
+          { id: "analyze_resume", label: "Analyze my resume" },
+          { id: "explain_expectations", label: "Explain what companies expect" },
+          { id: "track_progress", label: "Track my progress" },
+          { id: "career_decisions", label: "Help me make career decisions" }
+        ],
+        min: 1,
+        max: 4
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q9",
+    screenNumber: 9,
+    title: "When would you want a human mentor?",
+    fields: [
+      {
+        id: "human_mentor",
+        label: "Where would real professional experience be more valuable than AI alone? (Select up to 3)",
+        type: "multiple",
+        options: [
+          { id: "career_decisions", label: "Career decisions" },
+          { id: "personal_exp", label: "Personal career experience" },
+          { id: "project_feedback", label: "Project feedback" },
+          { id: "interview_exp", label: "Interview experience" },
+          { id: "industry_expectations", label: "Industry expectations" },
+          { id: "difficult_decisions", label: "Difficult career decisions" },
+          { id: "accountability", label: "Accountability" },
+          { id: "evaluating_readiness", label: "Evaluating whether I’m actually ready" },
+          { id: "prefer_ai", label: "I would prefer AI for most things" },
+          { id: "not_sure", label: "I’m not sure yet" }
+        ],
+        min: 1,
+        max: 3
+      }
+    ],
+    hasContext: false
+  },
+  {
+    id: "q10",
+    screenNumber: 10,
+    title: "Make MentorMaze useful for YOU",
+    fields: [
+      {
+        id: "one_question",
+        label: "What is the one question you most want MentorMaze to answer about your placement journey?",
+        type: "textarea",
+        min: 0,
+        max: 800
+      }
+    ],
+    hasContext: true,
+    contextPrompt: "Write it in your own words. For example: “Am I focusing on the right things for an SDE role?”"
+  }
+];
+
+export const professionalManifest: SurveyManifest = {
+  surveyType: 'professional',
+  version: '1.0',
+  hero: {
+    badge: 'AI + HUMAN CSE PLACEMENT MENTORSHIP',
+    titleTop: 'Learn from people who already made',
+    titleHighlight: 'the journey.',
+    description: 'Real technical-career experiences from professionals can help the next generation of CSE students understand what actually matters — what to learn, how to prepare, and what companies really evaluate.',
+    buttonText: 'Share Your Experience'
+  },
+  success: {
+    title: 'YOUR EXPERIENCE\nMATTERS.',
+    message: 'Thank you for sharing your journey.',
+    subMessage: 'The lessons you learned, the challenges you faced, and the choices you made can help future CSE students find a clearer path.'
+  },
+  config: professionalSurveyConfig
+};
+
+export const studentManifest: SurveyManifest = {
+  surveyType: 'student',
+  version: '1.0',
+  hero: {
+    badge: 'STUDENT PLACEMENT PROFILE',
+    titleTop: 'Build a better placement path for',
+    titleHighlight: 'yourself.',
+    description: 'Tell us where you are, what you\'re targeting, and where you need clarity. This helps us build MentorMaze around real student needs, not assumptions.',
+    buttonText: 'Start Your Profile'
+  },
+  success: {
+    title: 'THANK YOU FOR\nCONTRIBUTING.',
+    message: 'Your profile has been saved.',
+    subMessage: 'Your answers help us understand where CSE students actually need clarity, direction, and mentorship — so MentorMaze can be built around real student needs, not assumptions.'
+  },
+  config: studentSurveyConfig
+};

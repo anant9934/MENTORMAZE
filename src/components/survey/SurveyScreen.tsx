@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useSurvey } from "@/lib/SurveyContext";
-import { surveyConfig } from "@/data/survey";
 import { OptionCard } from "@/components/ui/OptionCard";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
@@ -19,11 +18,12 @@ export function SurveyScreenView() {
     prevScreen,
     isCurrentScreenValid,
     validationErrors,
+    manifest,
   } = useSurvey();
 
   const [isContextOpen, setIsContextOpen] = useState(false);
 
-  const screen = surveyConfig[currentScreenIndex];
+  const screen = manifest.config[currentScreenIndex];
   
   const [prevScreenId, setPrevScreenId] = useState(screen.id);
   if (screen.id !== prevScreenId) {
@@ -33,7 +33,7 @@ export function SurveyScreenView() {
 
   return (
     <div className="w-full max-w-[600px] mx-auto min-h-screen py-12 px-6 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <ProgressBar current={currentScreenIndex + 1} total={surveyConfig.length} className="mb-10" />
+      <ProgressBar current={currentScreenIndex + 1} total={manifest.config.length} className="mb-10" />
       
       <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-serif text-[#1a1208] mb-8 sm:mb-10 leading-[1.15] tracking-tight">
         {screen.title}
@@ -131,7 +131,7 @@ export function SurveyScreenView() {
             disabled={!isCurrentScreenValid}
             className="px-8 sm:px-10 h-12 text-sm sm:text-base transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            {currentScreenIndex === surveyConfig.length - 1 ? "Review" : "Continue"}
+            {currentScreenIndex === manifest.config.length - 1 ? "Review" : "Continue"}
           </Button>
         </div>
       </div>

@@ -1,9 +1,5 @@
-import { SurveyController } from "@/components/survey/SurveyController";
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <main className="min-h-screen">
-      <SurveyController />
-    </main>
-  );
+  redirect('/contribute');
 }

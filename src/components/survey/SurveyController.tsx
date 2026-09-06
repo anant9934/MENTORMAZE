@@ -7,6 +7,7 @@ import { SurveyScreenView } from "@/components/survey/SurveyScreen";
 import { ReviewScreen } from "@/components/survey/ReviewScreen";
 import { ConsentScreen } from "@/components/survey/ConsentScreen";
 import { submitSurveyAction } from "@/app/actions";
+import { SurveyManifest } from "@/data/survey";
 import { Button } from "@/components/ui/Button";
 import { HeroVisual } from "@/components/ui/HeroVisual";
 
@@ -17,14 +18,18 @@ function SurveyControllerInner() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const { isComplete, answers, contexts, sessionId } = useSurvey();
+  const { isComplete, answers, contexts, sessionId, manifest } = useSurvey();
 
   const handleStart = () => {
     setAppState("survey");
   };
 
   const handleConfirmReview = () => {
-    setAppState("consent");
+    if (manifest.surveyType === 'student') {
+      handleSubmit(true); // Skip consent for students
+    } else {
+      setAppState("consent");
+    }
   };
 
   const handleSubmit = async (consent: boolean) => {
@@ -33,7 +38,8 @@ function SurveyControllerInner() {
 
     const payload = {
       id: sessionId,
-      surveyVersion: "1.0",
+      surveyVersion: manifest.version,
+      surveyType: manifest.surveyType,
       consent,
       answers,
       context: contexts,
@@ -78,14 +84,14 @@ function SurveyControllerInner() {
           <div className="relative w-full lg:w-[45%] flex flex-col justify-center px-5 sm:px-8 md:px-12 py-6 lg:py-8 z-20 shrink-0">
             
             <p className="text-[10px] sm:text-xs font-semibold tracking-[0.15em] text-amber-600 mb-4 sm:mb-5 uppercase">
-              AI + HUMAN CSE PLACEMENT MENTORSHIP
+              {manifest.hero.badge}
             </p>
             
             <div className="relative mb-5 sm:mb-6">
               <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-serif text-[#1a1208] leading-[1.08] tracking-tight">
-                Learn from<br className="hidden sm:block" />{" "}people who<br className="hidden sm:block" />{" "}already made<br />
+                {manifest.hero.titleTop}<br />
                 <span className="relative inline-block mt-1 sm:mt-0">
-                  the journey.
+                  {manifest.hero.titleHighlight}
                   <svg className="absolute -bottom-1 left-0 w-[105%] h-3 text-amber-500" viewBox="0 0 200 20" preserveAspectRatio="none">
                     <path d="M 0 10 Q 100 20 200 0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
                   </svg>
@@ -94,12 +100,12 @@ function SurveyControllerInner() {
             </div>
             
             <p className="text-sm sm:text-base text-[#4a3f2f] max-w-[400px] mb-6 sm:mb-8 leading-relaxed">
-              Real technical-career experiences from professionals can help the next generation of CSE students understand what actually matters — what to learn, how to prepare, and what companies really evaluate.
+              {manifest.hero.description}
             </p>
             
             <div className="flex items-center gap-5 mb-8 sm:mb-10">
               <Button onClick={handleStart} className="px-6 sm:px-8 h-12 sm:h-14 rounded-full bg-[#1a1208] hover:bg-[#2a2218] text-white text-sm sm:text-base transition-transform hover:scale-[1.02] shadow-xl shadow-black/5">
-                Share Your Experience <span className="ml-2 font-serif text-lg sm:text-xl leading-none">&rarr;</span>
+                {manifest.hero.buttonText} <span className="ml-2 font-serif text-lg sm:text-xl leading-none">&rarr;</span>
               </Button>
               <div className="hidden sm:flex h-10 w-[1px] bg-black/10"></div>
               <div className="hidden sm:flex flex-col">
@@ -244,16 +250,16 @@ function SurveyControllerInner() {
             `}</style>
           </div>
 
-          <h2 className="text-[clamp(2rem,6vw,4rem)] font-serif text-[#1a1208] mb-6 sm:mb-8 leading-[1.05] tracking-tight text-center">
-            YOUR EXPERIENCE<br/>MATTERS.
+          <h2 className="text-[clamp(2rem,6vw,4rem)] font-serif text-[#1a1208] mb-6 sm:mb-8 leading-[1.05] tracking-tight text-center whitespace-pre-line">
+            {manifest.success.title}
           </h2>
           
           <p className="text-lg sm:text-xl text-[#1a1208] font-medium mb-4">
-            Thank you for sharing your journey.
+            {manifest.success.message}
           </p>
           
-          <p className="text-base sm:text-lg text-[#4a3f2f] leading-relaxed mb-12 sm:mb-16 max-w-lg">
-            The lessons you learned, the challenges you faced, and the choices you made can help future CSE students find a clearer path.
+          <p className="text-base sm:text-lg text-[#4a3f2f] leading-relaxed mb-12 sm:mb-16 max-w-lg text-center">
+            {manifest.success.subMessage}
           </p>
 
           <div className="w-16 h-[1px] bg-black/10 mb-8 sm:mb-10"></div>
@@ -291,9 +297,9 @@ function SurveyControllerInner() {
   return null;
 }
 
-export function SurveyController() {
+export function SurveyController({ manifest }: { manifest: SurveyManifest }) {
   return (
-    <SurveyProvider>
+    <SurveyProvider manifest={manifest}>
       <SurveyControllerInner />
     </SurveyProvider>
   );

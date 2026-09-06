@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useSurvey } from "@/lib/SurveyContext";
-import { surveyConfig } from "@/data/survey";
 import { Button } from "@/components/ui/Button";
 
 interface ReviewScreenProps {
@@ -11,7 +10,7 @@ interface ReviewScreenProps {
 }
 
 export function ReviewScreen({ onEdit, onContinue }: ReviewScreenProps) {
-  const { answers, contexts } = useSurvey();
+  const { answers, contexts, manifest } = useSurvey();
 
   return (
     <div className="w-full max-w-[700px] mx-auto min-h-screen py-12 px-6 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -20,7 +19,7 @@ export function ReviewScreen({ onEdit, onContinue }: ReviewScreenProps) {
       </h2>
 
       <div className="flex-1 flex flex-col gap-10 pb-10">
-        {surveyConfig.map((screen, index) => {
+        {manifest.config.map((screen, index) => {
           return (
             <div key={screen.id} className="p-6 sm:p-8 rounded-2xl bg-white border border-amber-600/15 shadow-sm relative group">
               <h3 className="text-lg font-medium text-[#1a1208] mb-6 pr-16">{screen.title}</h3>

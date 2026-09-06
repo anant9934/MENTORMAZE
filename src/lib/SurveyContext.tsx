@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
-import { surveyConfig } from "@/data/survey";
+import { SurveyManifest } from "@/data/survey";
 
 export type Answers = Record<string, string[]>;
 export type Contexts = Record<string, string>;
@@ -20,25 +20,26 @@ interface SurveyContextType {
   validationErrors: Record<string, string>;
   isComplete: boolean;
   sessionId: string;
+  manifest: SurveyManifest;
 }
 
 const SurveyContext = createContext<SurveyContextType | undefined>(undefined);
 
-export function SurveyProvider({ children }: { children: React.ReactNode }) {
+export function SurveyProvider({ children, manifest }: { children: React.ReactNode, manifest: SurveyManifest }) {
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [contexts, setContexts] = useState<Contexts>({});
   const [isComplete, setIsComplete] = useState(false);
   const [sessionId] = useState(() => crypto.randomUUID());
 
-  const currentScreen = surveyConfig[currentScreenIndex];
+  const currentScreen = manifest.config[currentScreenIndex];
 
   // Specific rule for Q6: if "none" is selected, clear other options.
   const handleAnswerChange = useCallback((fieldId: string, value: string[]) => {
     setAnswers(prev => {
       let newValue = value;
       // Hardcoded rule for Q6 "I did not have significant project experience"
-      if (fieldId === "project_type") {
+      if (manifest.surveyType === 'professional' && fieldId === "project_type") {
         if (value.includes("none") && value[value.length - 1] === "none") {
           newValue = ["none"];
         } else if (value.includes("none") && value.length > 1) {
@@ -46,7 +47,7 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
         }
       }
       // Cascade removal to derived fields
-      const derivedFields = surveyConfig
+      const derivedFields = manifest.config
         .flatMap(s => s.fields)
         .filter(f => f.derivesFromId === fieldId);
       
@@ -62,7 +63,7 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
 
       return newAnswers;
     });
-  }, []);
+  }, [manifest]);
 
   const setAnswer = useCallback((fieldId: string, value: string[]) => {
     handleAnswerChange(fieldId, value);
@@ -88,7 +89,7 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Hardcoded rule for Q6 again
-      if (fieldId === "project_type") {
+      if (manifest.surveyType === 'professional' && fieldId === "project_type") {
         if (value === "none" && !current.includes("none")) {
           next = ["none"];
         } else if (next.includes("none") && value !== "none") {
@@ -97,7 +98,7 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Cascade removal to derived fields
-      const derivedFields = surveyConfig
+      const derivedFields = manifest.config
         .flatMap(s => s.fields)
         .filter(f => f.derivesFromId === fieldId);
       
@@ -113,7 +114,7 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
 
       return newAnswers;
     });
-  }, []);
+  }, [manifest]);
 
   const setContext = useCallback((screenId: string, value: string) => {
     setContexts(prev => ({ ...prev, [screenId]: value }));
@@ -128,9 +129,10 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
     currentScreen.fields.forEach(field => {
       const fieldAnswers = answers[field.id] || [];
       const min = field.min || 0;
+      const max = field.max;
       
       // If it's the "value_factor" in Q6, but "none" was selected in "project_type"
-      if (field.id === "value_factor" && (answers["project_type"] || []).includes("none")) {
+      if (manifest.surveyType === 'professional' && field.id === "value_factor" && (answers["project_type"] || []).includes("none")) {
         // Skip validation
         return;
       }
@@ -138,6 +140,15 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
       if (fieldAnswers.length < min) {
         valid = false;
         newErrors[field.id] = `Please select at least ${min} option${min > 1 ? 's' : ''}.`;
+      }
+
+      // Add max length validation for textarea
+      if (field.type === 'textarea' && max) {
+        const text = fieldAnswers[0] || "";
+        if (text.length > max) {
+          valid = false;
+          newErrors[field.id] = `Maximum ${max} characters allowed.`;
+        }
       }
       
       // Check derived fields (like "greatest_impact")
@@ -152,11 +163,11 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
     });
 
     return { isValid: valid, errors: newErrors };
-  }, [currentScreen, answers]);
+  }, [currentScreen, answers, manifest.surveyType]);
 
   const nextScreen = useCallback(() => {
     if (isValid) {
-      if (currentScreenIndex < surveyConfig.length - 1) {
+      if (currentScreenIndex < manifest.config.length - 1) {
         setCurrentScreenIndex(prev => prev + 1);
         window.scrollTo(0,0);
       } else {
@@ -164,7 +175,7 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
         window.scrollTo(0,0);
       }
     }
-  }, [isValid, currentScreenIndex]);
+  }, [isValid, currentScreenIndex, manifest]);
 
   const prevScreen = useCallback(() => {
     if (currentScreenIndex > 0) {
@@ -187,7 +198,8 @@ export function SurveyProvider({ children }: { children: React.ReactNode }) {
       isCurrentScreenValid: isValid,
       validationErrors: errors,
       isComplete,
-      sessionId
+      sessionId,
+      manifest
     }}>
       {children}
     </SurveyContext.Provider>
