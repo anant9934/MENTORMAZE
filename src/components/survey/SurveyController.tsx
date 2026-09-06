@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { SurveyProvider, useSurvey } from "@/lib/SurveyContext";
 import { SurveyScreenView } from "@/components/survey/SurveyScreen";
 import { ReviewScreen } from "@/components/survey/ReviewScreen";
@@ -54,10 +55,13 @@ function SurveyControllerInner() {
         
         {/* Header */}
         <header className="relative z-20 flex justify-between items-start px-5 sm:px-8 md:px-12 pt-5 sm:pt-8 md:pt-10 pb-2 w-full max-w-[1600px] mx-auto">
-          <img 
+          <Image 
             src="/logo.png" 
             alt="MentorMaze" 
-            className="h-10 sm:h-12 md:h-14 object-contain object-left" 
+            width={200}
+            height={200}
+            className="h-10 sm:h-12 md:h-14 w-auto object-contain object-left" 
+            priority
           />
           <div className="hidden md:flex items-center gap-4 mt-1">
             <p className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] text-[#8a7a66] uppercase">
@@ -268,7 +272,13 @@ function SurveyControllerInner() {
 
         {/* Footer Brand Logo */}
         <footer className="absolute bottom-8 sm:bottom-12 w-full flex flex-col items-center justify-center opacity-80">
-          <img src="/logo.png" alt="MentorMaze" className="h-5 sm:h-6 object-contain mb-3" />
+          <Image 
+            src="/logo.png" 
+            alt="MentorMaze" 
+            width={100}
+            height={100}
+            className="h-5 sm:h-6 w-auto object-contain mb-3" 
+          />
           <p className="text-[8px] sm:text-[9px] font-bold tracking-[0.2em] text-[#8a7a66] uppercase">
             AI + HUMAN CSE PLACEMENT MENTORSHIP
           </p>

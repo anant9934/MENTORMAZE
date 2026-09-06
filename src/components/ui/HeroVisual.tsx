@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export function HeroVisual({ className }: { className?: string }) {
@@ -13,11 +14,14 @@ export function HeroVisual({ className }: { className?: string }) {
           WebkitMaskComposite: "source-in",
         }}
       >
-        <img
+        <Image
           src="/hero-journey.png"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-center"
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 55vw"
+          className="object-cover object-center"
           draggable={false}
         />
       </div>
