@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #f5f0e8;
+  --color-cream-alt: #ede8de;
+  --color-brown: #1a1208;
+  --color-brown-mid: #4a3f2f;
+  --color-brown-soft: #8a7a66;
+  --color-amber: #c8830a;
+  --color-amber-light: rgba(200, 131, 10, 0.15);
+  --color-amber-border: rgba(200, 131, 10, 0.3);
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 100px;
+
+  --shadow-card: 0 16px 40px rgba(200, 132, 42, 0.1);
+  --shadow-card-hover: 0 20px 50px rgba(200, 132, 42, 0.1);
+}
+
+@layer base {
+  :root {
+    --background: var(--color-cream);
+    --foreground: var(--color-brown);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.8;
+    cursor: none; /* Custom cursor implementation later */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+  }
+}
+
+@layer utilities {
+  .text-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+  }
+}
