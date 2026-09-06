@@ -14,8 +14,8 @@ export function ConsentScreen({ onSubmit, isSubmitting, onBack, error }: Consent
   const [consent, setConsent] = useState(false);
 
   return (
-    <div className="w-full max-w-[600px] mx-auto min-h-screen py-12 px-6 flex flex-col justify-center animate-in fade-in zoom-in-95 duration-500">
-      <div className="bg-white p-8 sm:p-12 rounded-3xl border border-amber-600/15 shadow-card relative">
+    <div className="w-full max-w-[600px] mx-auto min-h-[100dvh] py-8 sm:py-12 px-5 flex flex-col justify-center animate-in fade-in zoom-in-95 duration-500">
+      <div className="bg-white p-6 sm:p-12 rounded-[24px] sm:rounded-[32px] border border-amber-600/15 shadow-[0_20px_60px_rgba(200,132,42,0.1)] relative">
         <h2 className="text-2xl sm:text-3xl font-medium mb-6 text-[#1a1208]">
           Final Step: Consent
         </h2>
@@ -52,12 +52,12 @@ export function ConsentScreen({ onSubmit, isSubmitting, onBack, error }: Consent
           </div>
         )}
 
-        <div className="mt-10 flex items-center gap-4 pt-8 border-t border-amber-600/10">
+        <div className="mt-8 sm:mt-10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-amber-600/10">
           <Button 
             variant="ghost" 
             onClick={onBack}
             disabled={isSubmitting}
-            className="px-6 h-12"
+            className="px-6 h-12 w-full sm:w-auto"
           >
             Back
           </Button>
@@ -65,7 +65,7 @@ export function ConsentScreen({ onSubmit, isSubmitting, onBack, error }: Consent
             variant="primary" 
             onClick={() => onSubmit(consent)}
             disabled={!consent || isSubmitting}
-            className="flex-1 h-12"
+            className="flex-1 h-12 w-full transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             {isSubmitting ? "Submitting..." : "Submit Experience"}
           </Button>

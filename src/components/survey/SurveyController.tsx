@@ -78,9 +78,9 @@ function SurveyControllerInner() {
             </p>
             
             <div className="relative mb-5 sm:mb-6">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[5rem] font-serif text-[#1a1208] leading-[1.08]">
+              <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-serif text-[#1a1208] leading-[1.08] tracking-tight">
                 Learn from<br className="hidden sm:block" />{" "}people who<br className="hidden sm:block" />{" "}already made<br />
-                <span className="relative inline-block">
+                <span className="relative inline-block mt-1 sm:mt-0">
                   the journey.
                   <svg className="absolute -bottom-1 left-0 w-[105%] h-3 text-amber-500" viewBox="0 0 200 20" preserveAspectRatio="none">
                     <path d="M 0 10 Q 100 20 200 0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
@@ -132,26 +132,27 @@ function SurveyControllerInner() {
             </div>
           </div>
 
-          {/* Right Visual — properly contained, no overflow */}
-          <div className="w-full lg:w-[55%] relative h-[350px] sm:h-[450px] lg:h-auto lg:min-h-[500px] z-0">
+          {/* Right Visual — Mobile uses aspect ratio to frame student/path cleanly, Desktop fills height naturally */}
+          <div className="w-full lg:w-[55%] relative aspect-[4/3] sm:aspect-video lg:aspect-auto lg:h-auto lg:min-h-[500px] z-0 shrink-0 lg:shrink">
             <HeroVisual className="absolute inset-0 w-full h-full" />
           </div>
 
         </main>
 
         {/* Bottom Editorial Strip */}
-        <footer className="relative z-20 w-full max-w-[1600px] mx-auto px-5 sm:px-8 md:px-12 py-6 sm:py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-black/5 gap-4">
-          <div className="flex items-center gap-4 shrink-0">
+        <footer className="relative z-20 w-full max-w-[1600px] mx-auto px-5 sm:px-8 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between border-t border-black/5 gap-6 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center gap-4 shrink-0">
             <p className="text-[9px] sm:text-[10px] font-bold tracking-[0.12em] text-[#1a1208] uppercase leading-relaxed">
-              BUILT BY<br/>
-              REAL PROFESSIONALS<br/>
+              BUILT BY<br className="hidden md:block"/>
+              <span className="md:hidden"> REAL PROFESSIONALS </span>
+              <span className="hidden md:inline">REAL PROFESSIONALS<br/></span>
               FOR THE NEXT GENERATION
             </p>
             <div className="w-16 h-[1px] bg-black/5 hidden lg:block"></div>
           </div>
           
-          <div className="text-left sm:text-center flex-1">
-            <p className="font-serif text-[#1a1208] text-base sm:text-lg italic">
+          <div className="flex-1 max-w-[300px] md:max-w-none">
+            <p className="font-serif text-[#1a1208] text-base sm:text-lg italic leading-tight">
               &quot;The best advice comes from<br className="hidden sm:block"/>people who have lived it.&quot;
             </p>
             <p className="text-[10px] text-[#8a7a66] mt-2 font-semibold tracking-wider uppercase">— MentorMaze</p>
@@ -239,7 +240,7 @@ function SurveyControllerInner() {
             `}</style>
           </div>
 
-          <h2 className="text-[2.5rem] sm:text-5xl md:text-6xl font-serif text-[#1a1208] mb-6 sm:mb-8 leading-[1.05] tracking-tight">
+          <h2 className="text-[clamp(2rem,6vw,4rem)] font-serif text-[#1a1208] mb-6 sm:mb-8 leading-[1.05] tracking-tight text-center">
             YOUR EXPERIENCE<br/>MATTERS.
           </h2>
           

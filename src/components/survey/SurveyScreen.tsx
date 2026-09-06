@@ -35,7 +35,7 @@ export function SurveyScreenView() {
     <div className="w-full max-w-[600px] mx-auto min-h-screen py-12 px-6 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
       <ProgressBar current={currentScreenIndex + 1} total={surveyConfig.length} className="mb-10" />
       
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium mb-10 leading-tight">
+      <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-serif text-[#1a1208] mb-8 sm:mb-10 leading-[1.15] tracking-tight">
         {screen.title}
       </h2>
 
@@ -72,7 +72,7 @@ export function SurveyScreenView() {
                 {error && <span className="text-red-600 text-sm">{error}</span>}
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-auto-fit gap-3" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
                 {options.map(opt => (
                   <OptionCard
                     key={opt.id}
@@ -115,23 +115,25 @@ export function SurveyScreenView() {
         </div>
       )}
 
-      <div className="mt-12 flex items-center justify-between sticky bottom-6 bg-white/80 backdrop-blur-md p-4 -mx-4 rounded-2xl shadow-sm border border-amber-600/10 z-10">
-        <Button 
-          variant="ghost" 
-          onClick={prevScreen} 
-          disabled={currentScreenIndex === 0}
-          className="px-6 h-12"
-        >
-          Back
-        </Button>
-        <Button 
-          variant="primary" 
-          onClick={nextScreen}
-          disabled={!isCurrentScreenValid}
-          className="px-10 h-12"
-        >
-          {currentScreenIndex === surveyConfig.length - 1 ? "Review" : "Continue"}
-        </Button>
+      <div className="mt-auto pt-12 sticky bottom-0 sm:bottom-6 z-10 pb-6 sm:pb-0">
+        <div className="flex items-center justify-between bg-white/90 backdrop-blur-md p-4 sm:p-5 -mx-4 sm:mx-0 rounded-t-3xl sm:rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.03)] sm:shadow-sm border-t sm:border border-amber-600/10">
+          <Button 
+            variant="ghost" 
+            onClick={prevScreen} 
+            disabled={currentScreenIndex === 0}
+            className="px-5 sm:px-6 h-12 text-sm sm:text-base"
+          >
+            Back
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={nextScreen}
+            disabled={!isCurrentScreenValid}
+            className="px-8 sm:px-10 h-12 text-sm sm:text-base transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            {currentScreenIndex === surveyConfig.length - 1 ? "Review" : "Continue"}
+          </Button>
+        </div>
       </div>
     </div>
   );

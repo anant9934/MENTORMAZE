@@ -73,7 +73,7 @@ export function ReviewScreen({ onEdit, onContinue }: ReviewScreenProps) {
                 {contexts[screen.id] && (
                   <div className="flex flex-col gap-1.5 mt-2 bg-amber-600/5 p-4 rounded-xl">
                     <span className="text-label text-amber-600/80">Added Context</span>
-                    <p className="text-[#4a3f2f] text-sm italic whitespace-pre-wrap">{contexts[screen.id]}</p>
+                    <p className="text-[#4a3f2f] text-sm italic whitespace-pre-wrap break-words">{contexts[screen.id]}</p>
                   </div>
                 )}
               </div>
@@ -89,14 +89,16 @@ export function ReviewScreen({ onEdit, onContinue }: ReviewScreenProps) {
         })}
       </div>
 
-      <div className="mt-8 flex items-center justify-end sticky bottom-6 bg-white/80 backdrop-blur-md p-4 -mx-4 rounded-2xl shadow-sm border border-amber-600/10 z-10">
-        <Button 
-          variant="primary" 
-          onClick={onContinue}
-          className="px-10 h-12 w-full sm:w-auto"
-        >
-          Confirm & Continue
-        </Button>
+      <div className="mt-auto pt-12 sticky bottom-0 sm:bottom-6 z-10 pb-6 sm:pb-0">
+        <div className="flex items-center justify-end bg-white/90 backdrop-blur-md p-4 sm:p-5 -mx-4 sm:mx-0 rounded-t-3xl sm:rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.03)] sm:shadow-sm border-t sm:border border-amber-600/10">
+          <Button 
+            variant="primary" 
+            onClick={onContinue}
+            className="px-10 h-12 w-full sm:w-auto transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            Confirm & Continue
+          </Button>
+        </div>
       </div>
     </div>
   );
